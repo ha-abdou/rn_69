@@ -1324,68 +1324,68 @@ parameters:
 workflows:
   version: 2
 
-  # tests:
-  #   unless: << pipeline.parameters.run_package_release_workflow_only >>
-  #   jobs:
-  #     - prepare_hermes_workspace
-  #     - build_hermesc_linux:
-  #         requires:
-  #           - prepare_hermes_workspace
-  #     - build_hermes_macos:
-  #         requires:
-  #           - prepare_hermes_workspace
-  #     - build_hermesc_windows:
-  #         requires:
-  #           - prepare_hermes_workspace
-  #     - build_npm_package:
-  #         # Build a release package on every untagged commit, but do not publish to npm.
-  #         publish_npm_args: --dry-run
-  #         requires:
-  #           - build_hermesc_linux
-  #           - build_hermes_macos
-  #           - build_hermesc_windows
-  #     - test_js:
-  #         run_disabled_tests: false
-  #     - test_android:
-  #         run_disabled_tests: false
-  #     - test_android_template:
-  #         requires:
-  #           - build_npm_package
-  #     - test_android_rntester
-  #     - test_ios_template:
-  #         requires:
-  #           - build_npm_package
-  #     - test_ios_rntester
-  #     - build_ios
-  #     - test_ios_unit:
-  #         run_unit_tests: true
-  #         requires:
-  #           - build_ios
-  #     # DISABLED: USE_FRAMEWORKS=1 not supported by Flipper
-  #     # - build_ios:
-  #     #     name: build_ios_frameworks
-  #     #     use_frameworks: true
-  #     # - test_ios_unit:
-  #     #     name: test_ios_unit_frameworks
-  #     #     use_frameworks: true
-  #     #     run_unit_tests: true
-  #     #     requires:
-  #     #       - build_ios_frameworks
-  #     - test_js:
-  #         name: test_js_prev_lts
-  #         executor: nodeprevlts
-  #     - test_windows:
-  #         run_disabled_tests: false
+  tests:
+    unless: << pipeline.parameters.run_package_release_workflow_only >>
+    jobs:
+      # - prepare_hermes_workspace
+      # - build_hermesc_linux:
+      #     requires:
+      #       - prepare_hermes_workspace
+      # - build_hermes_macos:
+      #     requires:
+      #       - prepare_hermes_workspace
+      # - build_hermesc_windows:
+      #     requires:
+      #       - prepare_hermes_workspace
+      - build_npm_package:
+          # Build a release package on every untagged commit, but do not publish to npm.
+          publish_npm_args: --dry-run
+          # requires:
+          #   - build_hermesc_linux
+          #   - build_hermes_macos
+          #   - build_hermesc_windows
+      # - test_js:
+      #     run_disabled_tests: false
+      # - test_android:
+      #     run_disabled_tests: false
+      # - test_android_template:
+      #     requires:
+      #       - build_npm_package
+      # - test_android_rntester
+      # - test_ios_template:
+      #     requires:
+      #       - build_npm_package
+      # - test_ios_rntester
+      # - build_ios
+      # - test_ios_unit:
+      #     run_unit_tests: true
+      #     requires:
+      #       - build_ios
+      # DISABLED: USE_FRAMEWORKS=1 not supported by Flipper
+      # - build_ios:
+      #     name: build_ios_frameworks
+      #     use_frameworks: true
+      # - test_ios_unit:
+      #     name: test_ios_unit_frameworks
+      #     use_frameworks: true
+      #     run_unit_tests: true
+      #     requires:
+      #       - build_ios_frameworks
+      # - test_js:
+      #     name: test_js_prev_lts
+      #     executor: nodeprevlts
+      # - test_windows:
+      #     run_disabled_tests: false
 
   # This workflow should only be triggered by release script
-  # package_release:
-  #   unless: << pipeline.parameters.run_package_release_workflow_only >>
-  #   jobs:
-  #     # This job will trigger publish_release workflow
-  #     - prepare_package_for_release:
-  #         name: prepare_package_for_release
-  #         version: << pipeline.parameters.release_version >>
-  #         latest : << pipeline.parameters.release_latest >>
+  package_release:
+    when: << pipeline.parameters.run_package_release_workflow_only >>
+    jobs:
+      # This job will trigger publish_release workflow
+      - prepare_package_for_release:
+          name: prepare_package_for_release
+          version: << pipeline.parameters.release_version >>
+          latest : << pipeline.parameters.release_latest >>
 
   publish_release:
     unless: << pipeline.parameters.run_package_release_workflow_only >>
