@@ -1200,13 +1200,13 @@ jobs:
             echo '|1|If6MU203eXTaaWL678YEfWkVMrw=|kqLeIAyTy8pzpj8x8Ae4Fr8Mtlc= ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==' >> ~/.ssh/known_hosts
       - checkout
       - *attach_hermes_workspace
-      - run:
-          name: Copy HermesC binaries
-          command: |
-            mkdir -p ./sdks/hermesc ./sdks/hermesc/osx-bin ./sdks/hermesc/win64-bin ./sdks/hermesc/linux64-bin
-            cp -r $HERMES_WS_DIR/osx-bin/* ./sdks/hermesc/osx-bin/.
-            cp -r $HERMES_WS_DIR/win64-bin/* ./sdks/hermesc/win64-bin/.
-            cp -r $HERMES_WS_DIR/linux64-bin/* ./sdks/hermesc/linux64-bin/.
+      # - run:
+      #     name: Copy HermesC binaries
+      #     command: |
+      #       mkdir -p ./sdks/hermesc ./sdks/hermesc/osx-bin ./sdks/hermesc/win64-bin ./sdks/hermesc/linux64-bin
+      #       cp -r $HERMES_WS_DIR/osx-bin/* ./sdks/hermesc/osx-bin/.
+      #       cp -r $HERMES_WS_DIR/win64-bin/* ./sdks/hermesc/win64-bin/.
+      #       cp -r $HERMES_WS_DIR/linux64-bin/* ./sdks/hermesc/linux64-bin/.
 
       - run_yarn
       - install_buck_tooling
@@ -1321,23 +1321,23 @@ workflows:
   tests:
     unless: << pipeline.parameters.run_package_release_workflow_only >>
     jobs:
-      - prepare_hermes_workspace
-      - build_hermesc_linux:
-          requires:
-            - prepare_hermes_workspace
-      - build_hermes_macos:
-          requires:
-            - prepare_hermes_workspace
-      - build_hermesc_windows:
-          requires:
-            - prepare_hermes_workspace
+      # - prepare_hermes_workspace
+      # - build_hermesc_linux:
+      #     requires:
+      #       - prepare_hermes_workspace
+      # - build_hermes_macos:
+      #     requires:
+      #       - prepare_hermes_workspace
+      # - build_hermesc_windows:
+      #     requires:
+      #       - prepare_hermes_workspace
       - build_npm_package:
           # Build a release package on every untagged commit, but do not publish to npm.
           publish_npm_args: --dry-run
-          requires:
-            - build_hermesc_linux
-            - build_hermes_macos
-            - build_hermesc_windows
+          # requires:
+          #   - build_hermesc_linux
+          #   - build_hermes_macos
+          #   - build_hermesc_windows
       # - test_js:
       #     run_disabled_tests: false
       # - test_android:
