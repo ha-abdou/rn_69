@@ -1321,23 +1321,23 @@ workflows:
   tests:
     unless: << pipeline.parameters.run_package_release_workflow_only >>
     jobs:
-      # - prepare_hermes_workspace
-      # - build_hermesc_linux:
-      #     requires:
-      #       - prepare_hermes_workspace
-      # - build_hermes_macos:
-      #     requires:
-      #       - prepare_hermes_workspace
-      # - build_hermesc_windows:
-      #     requires:
-      #       - prepare_hermes_workspace
+      - prepare_hermes_workspace
+      - build_hermesc_linux:
+          requires:
+            - prepare_hermes_workspace
+      - build_hermes_macos:
+          requires:
+            - prepare_hermes_workspace
+      - build_hermesc_windows:
+          requires:
+            - prepare_hermes_workspace
       - build_npm_package:
           # Build a release package on every untagged commit, but do not publish to npm.
           publish_npm_args: --dry-run
-          # requires:
-          #   - build_hermesc_linux
-          #   - build_hermes_macos
-          #   - build_hermesc_windows
+          requires:
+            - build_hermesc_linux
+            - build_hermes_macos
+            - build_hermesc_windows
       # - test_js:
       #     run_disabled_tests: false
       # - test_android:
