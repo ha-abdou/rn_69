@@ -64,7 +64,7 @@ executors:
   reactnativeandroid:
     <<: *defaults
     docker:
-      - image: reactnativecommunity/react-native-android:5.4
+      - image: reactnativecommunity/react-native-android
     resource_class: "xlarge"
     environment:
       - TERM: "dumb"
@@ -1237,26 +1237,20 @@ jobs:
       - store_artifacts:
           path: /tmp/hermes-native-symbols.zip
 
-      # START: Commitlies
-      # Provide a react-native package for this commit as a Circle CI release artifact.
-      - when:
-          condition:
-            equal: [ --dry-run, << parameters.publish_npm_args >> ]
-          steps:
-            - run:
-                name: Build release package as a job artifact
-                command: |
-                  mkdir -p build
-                  FILENAME=$(npm pack)
-                  mv $FILENAME build/
-                  echo $FILENAME > build/react-native-package-version
-            - store_artifacts:
-                path: ~/react-native/build/
-                destination: build
-            - persist_to_workspace:
-                root: .
-                paths:
-                  - build/*
+      - run:
+          name: Build release package as a job artifact
+          command: |
+            mkdir -p build
+            FILENAME=$(npm pack)
+            mv $FILENAME build/
+            echo $FILENAME > build/react-native-package-version
+      - store_artifacts:
+          path: ~/react-native/build/
+          destination: build
+      - persist_to_workspace:
+          root: .
+          paths:
+            - build/*
       # END: Commitlies
 
       # START: Commits from pull requests
