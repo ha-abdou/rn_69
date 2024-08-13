@@ -1378,14 +1378,14 @@ workflows:
   #         run_disabled_tests: false
 
   # This workflow should only be triggered by release script
-  package_release:
-    unless: << pipeline.parameters.run_package_release_workflow_only >>
-    jobs:
-      # This job will trigger publish_release workflow
-      - prepare_package_for_release:
-          name: prepare_package_for_release
-          version: << pipeline.parameters.release_version >>
-          latest : << pipeline.parameters.release_latest >>
+  # package_release:
+  #   unless: << pipeline.parameters.run_package_release_workflow_only >>
+  #   jobs:
+  #     # This job will trigger publish_release workflow
+  #     - prepare_package_for_release:
+  #         name: prepare_package_for_release
+  #         version: << pipeline.parameters.release_version >>
+  #         latest : << pipeline.parameters.release_latest >>
 
   publish_release:
     unless: << pipeline.parameters.run_package_release_workflow_only >>
